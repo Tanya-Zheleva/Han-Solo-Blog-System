@@ -1,0 +1,61 @@
+﻿@using Microsoft.AspNet.Identity
+
+@model BlogSystem.Models.IndexViewModel
+@{
+    ViewBag.Title = "Manage";
+}
+
+<div class="container">
+    <div class="well">
+        <h2>@ViewBag.Title.</h2>
+
+        <p class="text-success">@ViewBag.StatusMessage</p>
+        <div>
+            <h4>Change your account settings</h4>
+            <hr />
+            <dl class="dl-horizontal">
+                <dt>Profile Picture:</dt>
+                <dd>
+                    @if (User.Identity.GetUserName() != null)
+                     {
+                        var imgUrl = Url.Content("~/Content/images/profile/" 
+                            + User.Identity.GetUserName() + ".png") 
+                            + "?time=" + DateTime.Now.ToString();        
+                        <div>
+                            <div>
+                                <img src="@imgUrl" class="resize-img"/>
+                            </div>
+                           <br />
+                            <div>
+                                @using (Html.BeginForm("UploadPhoto", "Manage", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                                {
+                                    <div class="btn btn-info">
+                                        <input type="file" name="file" id="files" onchange="this.form.submit()" />
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                </dd>
+                <br />
+                <dt>Password:</dt>
+                <dd>
+                    @if (Model.HasPassword)
+                    {
+                        @Html.ActionLink("Change your password", "ChangePassword", null, new {@class = "btn btn-info btn-xs"})
+                    }
+                    else
+                    {
+                        @Html.ActionLink("Create", "SetPassword", null, new {@class = "btn btn-info btn-xs"})
+                    }
+                </dd>
+                <br/>
+                <dt>External Logins:</dt>
+                <dd>
+                    @Model.Logins.Count
+                    @Html.ActionLink("Manage", "ManageLogins", null, new {@class = "btn btn-info btn-xs"})
+                </dd>
+            </dl>            
+        </div>
+    </div>
+</div>
