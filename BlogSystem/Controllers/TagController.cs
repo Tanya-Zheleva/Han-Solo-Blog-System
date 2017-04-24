@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Net;
-using System.Web;
-using System.Web.Mvc;
-using BlogSystem.Models;
-
-namespace BlogSystem.Controllers
+﻿namespace BlogSystem.Controllers
 {
+    using System.Data.Entity;
+    using System.Linq;
+    using System.Net;
+    using System.Web.Mvc;
+    using Models;
+
     public class TagController : Controller
     {
         //
@@ -28,7 +25,6 @@ namespace BlogSystem.Controllers
 
             using (var database = new BlogDbContext())
             {
-                //Get articles from database
                 var articles = database.Tags
                     .Include(t => t.Articles.Select(a => a.Tags))
                     .Include(t => t.Articles.Select(a => a.Author))
@@ -36,7 +32,6 @@ namespace BlogSystem.Controllers
                     .Articles
                     .ToList();
 
-                //Return the view
                 return View(articles);
             }
         }

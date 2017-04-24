@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Web;
-
-namespace BlogSystem.Models
+﻿namespace BlogSystem.Models
 {
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
+
     public class Category
     {
         private ICollection<Article> articles;
@@ -16,7 +13,7 @@ namespace BlogSystem.Models
             this.articles = new HashSet<Article>();
         }
 
-        [Key]        
+        [Key]
         public int Id { get; set; }
 
         [Required]

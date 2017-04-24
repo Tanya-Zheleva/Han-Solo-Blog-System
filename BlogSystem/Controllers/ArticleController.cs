@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Data.Entity;
-using System.Linq;
-using System.Net;
-using System.Web;
-using System.Web.Mvc;
-using BlogSystem.Models;
-using BlogSystem.Extensions;
-
-namespace BlogSystem.Controllers
+﻿namespace BlogSystem.Controllers
 {
+    using System;
+    using System.ComponentModel.DataAnnotations;
+    using System.Data.Entity;
+    using System.Linq;
+    using System.Net;
+    using System.Web.Mvc;
+    using Models;
+    using Extensions;
+
     public class ArticleController : Controller
     {
         //
@@ -26,7 +24,6 @@ namespace BlogSystem.Controllers
         {
             using (var database = new BlogDbContext())
             {
-                //Get articles from database
                 var articles = database.Articles
                     .Include(a => a.Author)
                     .Include(a => a.Tags)
@@ -47,7 +44,6 @@ namespace BlogSystem.Controllers
 
             using (var database = new BlogDbContext())
             {
-                //Get the articles from database
                 var article = database.Articles
                     .Where(a => a.Id == id)
                     .Include(a => a.Author)
@@ -71,10 +67,12 @@ namespace BlogSystem.Controllers
         {
             using (var database = new BlogDbContext())
             {
-                var model = new ArticleViewModel();
-                model.Categories = database.Categories
-                    .OrderBy(c => c.Name)
-                    .ToList();
+                var model = new ArticleViewModel
+                {
+                    Categories = database.Categories
+                        .OrderBy(c => c.Name)
+                        .ToList()
+                };
 
                 return View(model);
             }
@@ -86,11 +84,10 @@ namespace BlogSystem.Controllers
         [Authorize]
         public ActionResult Create(ArticleViewModel model)
         {
-            if (ModelState.IsValid)
+            if (this.ModelState.IsValid)
             {
                 using (var database = new BlogDbContext())
                 {
-                    //Get author id
                     var authorId = database.Users
                         .First(u => u.UserName == this.User.Identity.Name)
                         .Id;
@@ -98,7 +95,6 @@ namespace BlogSystem.Controllers
                     var article = new Article(authorId, model.Title, model.Content, model.CategoryId);
                     this.SetArticleTags(article, model, database);
 
-                    //Save article in Db
                     database.Articles.Add(article);
                     database.SaveChanges();
                     this.AddNotification("Article created!", NotificationType.INFO);
@@ -121,7 +117,6 @@ namespace BlogSystem.Controllers
 
             using (var database = new BlogDbContext())
             {
-                //Get article from databse
                 var article = database.Articles
                     .Where(a => a.Id == id)
                     .Include(a => a.Author)
@@ -133,9 +128,8 @@ namespace BlogSystem.Controllers
                     return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
                 }
 
-                ViewBag.TagsString = string.Join(", ", article.Tags.Select(t => t.Name));
+                this.ViewBag.TagsString = string.Join(", ", article.Tags.Select(t => t.Name));
 
-                //Check if article exists
                 if (article == null)
                 {
                     return HttpNotFound();
@@ -161,24 +155,20 @@ namespace BlogSystem.Controllers
 
             using (var database = new BlogDbContext())
             {
-                //Get article from db
                 var article = database.Articles
                     .Where(a => a.Id == id)
                     .Include(a => a.Author)
                     .First();
 
-                //Check if article exists
                 if (article == null)
                 {
                     return HttpNotFound();
                 }
 
-                //Remove article from db
                 database.Articles.Remove(article);
                 database.SaveChanges();
                 this.AddNotification("Article deleted!", NotificationType.SUCCESS);
 
-                //Redirect to index page
                 return RedirectToAction("Index");
             }
         }
@@ -194,35 +184,31 @@ namespace BlogSystem.Controllers
 
             using (var database = new BlogDbContext())
             {
-                //Get article from database
                 var article = database.Articles
-                    .Where(a => a.Id == id)
-                    .First();
+                    .FirstOrDefault(a => a.Id == id);
 
                 if (!IsUserAuthorizedToEdit(article))
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
                 }
 
-                //Check if article exists
                 if (article == null)
                 {
                     return HttpNotFound();
                 }
 
-                //Create the view model
-                var model = new ArticleViewModel();
-                model.Id = article.Id;
-                model.Title = article.Title;
-                model.Content = article.Content;
-                model.CategoryId = article.CategoryId;
-                model.Categories = database.Categories
-                    .OrderBy(c => c.Name)
-                    .ToList();
+                var model = new ArticleViewModel
+                {
+                    Id = article.Id,
+                    Title = article.Title,
+                    Content = article.Content,
+                    CategoryId = article.CategoryId,
+                    Categories = database.Categories
+                        .OrderBy(c => c.Name)
+                        .ToList(),
+                    Tags = string.Join(", ", article.Tags.Select(t => t.Name))
+                };
 
-                model.Tags = string.Join(", ", article.Tags.Select(t => t.Name));
-
-                //Pass the view model to view
                 return View(model);
             }
         }
@@ -232,61 +218,49 @@ namespace BlogSystem.Controllers
         [HttpPost]
         public ActionResult Edit(ArticleViewModel model)
         {
-            //Check if model state is valid
-            if (ModelState.IsValid)
+            if (this.ModelState.IsValid)
             {
                 using (var database = new BlogDbContext())
                 {
-                    //Get article from database
                     var article = database.Articles
                         .FirstOrDefault(a => a.Id == model.Id);
 
-                    //Set article properties
                     article.Title = model.Title;
                     article.Content = model.Content;
                     article.CategoryId = model.CategoryId;
                     this.SetArticleTags(article, model, database);
 
-                    //Save article state in database
                     database.Entry(article).State = EntityState.Modified;
                     database.SaveChanges();
                     this.AddNotification("Article edited!", NotificationType.SUCCESS);
 
-                    //Return to the index page
                     return RedirectToAction("Index");
                 }
             }
 
-            //If model state is invalid return the same view
             return View(model);
         }
 
         private void SetArticleTags(Article article, ArticleViewModel model, BlogDbContext database)
         {
-            //Split tags
             var tagsString = model.Tags
                 .Split(new[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries)
                 .Select(t => t.ToLower())
                 .Distinct();
 
-            //Clear current article tags
             article.Tags.Clear();
 
-            //Set new article tags
             foreach (var tagString in tagsString)
             {
-                //Get tag from db by its name
                 Tag tag = database.Tags
                     .FirstOrDefault(t => t.Name.Equals(tagString));
 
-                //If the tag is null, create new tag
                 if (tag == null)
                 {
                     tag = new Tag() { Name = tagString };
                     database.Tags.Add(tag);
                 }
 
-                //Add tag to article tags
                 article.Tags.Add(tag);
             }
         }

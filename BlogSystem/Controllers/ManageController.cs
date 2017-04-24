@@ -1,19 +1,18 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.Hosting;
-using System.Web.Mvc;
-using BlogSystem.Extensions;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.Owin;
-using Microsoft.Owin.Security;
-using BlogSystem.Models;
-using Microsoft.AspNetCore.Hosting;
-
-namespace BlogSystem.Controllers
+﻿namespace BlogSystem.Controllers
 {
+    using System.IO;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using System.Web;
+    using System.Web.Hosting;
+    using System.Web.Mvc;
+    using Extensions;
+    using Microsoft.AspNet.Identity;
+    using Microsoft.AspNet.Identity.Owin;
+    using Microsoft.Owin.Security;
+    using Models;
+    using Microsoft.AspNetCore.Hosting;
+
     [Authorize]
     public class ManageController : Controller
     {
@@ -39,9 +38,9 @@ namespace BlogSystem.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
+            private set
+            {
+                _signInManager = value;
             }
         }
 
@@ -123,7 +122,7 @@ namespace BlogSystem.Controllers
             {
                 return View(model);
             }
-            // Generate the token and send it
+         
             var code = await UserManager.GenerateChangePhoneNumberTokenAsync(User.Identity.GetUserId(), model.Number);
             if (UserManager.SmsService != null)
             {
@@ -132,6 +131,7 @@ namespace BlogSystem.Controllers
                     Destination = model.Number,
                     Body = "Your security code is: " + code
                 };
+
                 await UserManager.SmsService.SendAsync(message);
             }
             return RedirectToAction("VerifyPhoneNumber", new { PhoneNumber = model.Number });
@@ -149,6 +149,7 @@ namespace BlogSystem.Controllers
             {
                 await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
             }
+
             return RedirectToAction("Index", "Manage");
         }
 
@@ -164,6 +165,7 @@ namespace BlogSystem.Controllers
             {
                 await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
             }
+
             return RedirectToAction("Index", "Manage");
         }
 
@@ -172,7 +174,7 @@ namespace BlogSystem.Controllers
         public async Task<ActionResult> VerifyPhoneNumber(string phoneNumber)
         {
             var code = await UserManager.GenerateChangePhoneNumberTokenAsync(User.Identity.GetUserId(), phoneNumber);
-            // Send an SMS through the SMS provider to verify the phone number
+
             return phoneNumber == null ? View("Error") : View(new VerifyPhoneNumberViewModel { PhoneNumber = phoneNumber });
         }
 
@@ -212,11 +214,14 @@ namespace BlogSystem.Controllers
             {
                 return RedirectToAction("Index", new { Message = ManageMessageId.Error });
             }
+
             var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+
             if (user != null)
             {
                 await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
             }
+
             return RedirectToAction("Index", new { Message = ManageMessageId.RemovePhoneSuccess });
         }
 
@@ -312,7 +317,6 @@ namespace BlogSystem.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult LinkLogin(string provider)
         {
-            // Request a redirect to the external login provider to link a login for the current user
             return new AccountController.ChallengeResult(provider, Url.Action("LinkLoginCallback", "Manage"), User.Identity.GetUserId());
         }
 
@@ -355,7 +359,7 @@ namespace BlogSystem.Controllers
                         directory.Create();
                     }
 
-                    ViewBag.FilePath = filePath.ToString();
+                    this.ViewBag.FilePath = filePath.ToString();
                     file.SaveAs(filePath);
 
                     this.AddNotification("Your photo has been uploaded!", NotificationType.SUCCESS);
@@ -386,7 +390,7 @@ namespace BlogSystem.Controllers
             base.Dispose(disposing);
         }
 
-#region Helpers
+        #region Helpers
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";
 
@@ -445,6 +449,6 @@ namespace BlogSystem.Controllers
             FileExtensionError
         }
 
-#endregion
+        #endregion
     }
 }

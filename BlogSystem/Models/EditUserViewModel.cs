@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using System.Net;
-using System.Web.UI.WebControls;
-
-namespace BlogSystem.Models
+﻿namespace BlogSystem.Models
 {
+    using System.Collections.Generic;
+    using System.ComponentModel;
+
     public class EditUserViewModel
     {
         public ApplicationUser User { get; set; }
@@ -19,6 +13,6 @@ namespace BlogSystem.Models
         [System.ComponentModel.DataAnnotations.Compare("Password", ErrorMessage = "Password does not match")]
         public string ConfirmPassword { get; set; }
 
-        public IList<Role> Roles { get; set; }       
+        public IList<Role> Roles { get; set; }
     }
 }

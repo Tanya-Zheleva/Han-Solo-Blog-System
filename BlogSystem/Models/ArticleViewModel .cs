@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
-
-namespace BlogSystem.Models
+﻿namespace BlogSystem.Models
 {
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+
     public class ArticleViewModel
     {
         public int Id { get; set; }
@@ -21,8 +18,8 @@ namespace BlogSystem.Models
 
         public int CategoryId { get; set; }
 
-        public ICollection<Category> Categories { get; set; }      
-        
+        public ICollection<Category> Categories { get; set; }
+
         public string Tags { get; set; }
     }
 }
