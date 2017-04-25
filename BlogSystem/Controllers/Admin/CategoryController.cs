@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Net;
-using System.Web;
-using System.Web.Mvc;
-using BlogSystem.Extensions;
-using BlogSystem.Models;
-
-namespace BlogSystem.Controllers.Admin
+﻿namespace BlogSystem.Controllers.Admin
 {
+    using System.Data.Entity;
+    using System.Linq;
+    using System.Net;
+    using System.Web.Mvc;
+    using Extensions;
+    using Models;
+
     public class CategoryController : Controller
     {
         //
@@ -148,7 +145,6 @@ namespace BlogSystem.Controllers.Admin
                 database.Categories.Remove(category);
                 database.SaveChanges();
                 this.AddNotification("Category deleted!", NotificationType.SUCCESS);
-
 
                 return RedirectToAction("Index");
             }

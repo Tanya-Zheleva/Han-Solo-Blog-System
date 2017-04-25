@@ -1,11 +1,9 @@
-using BlogSystem.Models;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
-
 namespace BlogSystem.Migrations
 {
+    using Models;
+    using Microsoft.AspNet.Identity;
+    using Microsoft.AspNet.Identity.EntityFramework;
     using System;
-    using System.Data.Entity;
     using System.Data.Entity.Migrations;
     using System.Linq;
 
@@ -39,7 +37,7 @@ namespace BlogSystem.Migrations
             var userManager = new UserManager<ApplicationUser>(
                 new UserStore<ApplicationUser>(context));
 
-            var user = context.Users.Where(u => u.Email == email).First();
+            var user = context.Users.First(u => u.Email == email);
 
             var result = userManager.AddToRole(user.Id, role);
 

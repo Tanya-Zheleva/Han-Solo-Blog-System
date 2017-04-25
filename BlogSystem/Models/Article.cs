@@ -37,6 +37,8 @@
 
         public virtual ApplicationUser Author { get; set; }
 
+        public string ImagePath { get; set; }
+
         [ForeignKey("Category")]
         [Display(Name = "Category Id")]
         public int CategoryId { get; set; }

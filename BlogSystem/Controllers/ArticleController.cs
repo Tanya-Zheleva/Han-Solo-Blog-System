@@ -1,4 +1,6 @@
-﻿namespace BlogSystem.Controllers
+﻿using System.Web;
+
+namespace BlogSystem.Controllers
 {
     using System;
     using System.ComponentModel.DataAnnotations;
@@ -61,8 +63,7 @@
 
         //
         //GET: Article/Create
-        [Authorize]
-        [Display(Name = "Category Id")]
+        [Authorize]        
         public ActionResult Create()
         {
             using (var database = new BlogDbContext())
@@ -82,7 +83,7 @@
         //POST: Article/Create
         [HttpPost]
         [Authorize]
-        public ActionResult Create(ArticleViewModel model)
+        public ActionResult Create(ArticleViewModel model, HttpPostedFileBase image )
         {
             if (this.ModelState.IsValid)
             {
@@ -94,6 +95,23 @@
 
                     var article = new Article(authorId, model.Title, model.Content, model.CategoryId);
                     this.SetArticleTags(article, model, database);
+
+                    if (image != null)
+                    {
+                        var allowedContentTypes = new[] {"image/jpeg", "image/jpg", "image/png"};
+
+                        if (allowedContentTypes.Contains(image.ContentType))
+                        {
+                            var imagesPath = "/Content/Images";
+                            var fileName = image.FileName;
+                            var uploadPath = imagesPath + fileName;
+
+                            var physicalPath = this.Server.MapPath(uploadPath);
+                            image.SaveAs(physicalPath);
+
+                            article.ImagePath = uploadPath;
+                        }
+                    }
 
                     database.Articles.Add(article);
                     database.SaveChanges();

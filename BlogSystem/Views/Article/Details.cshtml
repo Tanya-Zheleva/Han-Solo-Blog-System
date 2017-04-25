@@ -14,8 +14,14 @@
         <p>
             @Model.Content
         </p>
-        <small class="author" id="adjust-author-name">           
-            --author @Model.Author.FullName              
+
+        @if (!string.IsNullOrEmpty(Model.ImagePath))
+        {
+            <img src="@Model.ImagePath" alt="Article Image" width="300px" height="300px" />
+        }
+
+        <small class="author" id="adjust-author-name">
+            --author @Model.Author.FullName
         </small>
         <footer>
             <div class="pull-left">
@@ -26,7 +32,7 @@
                     </span>
                 }
             </div>
-            
+
             <div class="pull-right">
                 @if (User.IsInRole("Admin") || Model.IsAuthor(User.Identity.Name))
                 {
