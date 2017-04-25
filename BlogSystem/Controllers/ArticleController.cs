@@ -83,7 +83,7 @@ namespace BlogSystem.Controllers
         //POST: Article/Create
         [HttpPost]
         [Authorize]
-        public ActionResult Create(ArticleViewModel model, HttpPostedFileBase image )
+        public ActionResult Create(ArticleViewModel model, HttpPostedFileBase image)
         {
             if (this.ModelState.IsValid)
             {
@@ -234,7 +234,7 @@ namespace BlogSystem.Controllers
         //
         //POST: Article/Edit
         [HttpPost]
-        public ActionResult Edit(ArticleViewModel model)
+        public ActionResult Edit(ArticleViewModel model, HttpPostedFileBase image)
         {
             if (this.ModelState.IsValid)
             {
@@ -247,6 +247,23 @@ namespace BlogSystem.Controllers
                     article.Content = model.Content;
                     article.CategoryId = model.CategoryId;
                     this.SetArticleTags(article, model, database);
+
+                    if (image != null)
+                    {
+                        var allowedContentTypes = new[] { "image/jpeg", "image/jpg", "image/png" };
+
+                        if (allowedContentTypes.Contains(image.ContentType))
+                        {
+                            var imagesPath = "/Content/Images";
+                            var fileName = image.FileName;
+                            var uploadPath = imagesPath + fileName;
+
+                            var physicalPath = this.Server.MapPath(uploadPath);
+                            image.SaveAs(physicalPath);
+
+                            article.ImagePath = uploadPath;
+                        }
+                    }
 
                     database.Entry(article).State = EntityState.Modified;
                     database.SaveChanges();
