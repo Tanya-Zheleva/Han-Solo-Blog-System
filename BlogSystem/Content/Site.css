@@ -30,3 +30,9 @@
 #adjust-read-more {
     margin-bottom: 10px;
 }
+
+.article-image {
+    width: 200px;
+    height: 200px;
+    margin-bottom: 20px;
+}

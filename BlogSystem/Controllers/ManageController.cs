@@ -351,8 +351,9 @@
                     toLowerExtension.EndsWith(".gif") ||
                     toLowerExtension.EndsWith(".jpeg"))
                 {
-                    var filePath = HostingEnvironment.MapPath("~/Content/Images/profile/") + newFileExt;
-                    var directory = new DirectoryInfo(HostingEnvironment.MapPath("~/Content/Images/profile/"));
+                    var path = "~/Content/Images/profile/";
+                    var filePath = HostingEnvironment.MapPath(path) + newFileExt;
+                    var directory = new DirectoryInfo(HostingEnvironment.MapPath(path));
 
                     if (!directory.Exists)
                     {
