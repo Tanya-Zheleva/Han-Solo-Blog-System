@@ -3,7 +3,6 @@
 namespace BlogSystem.Controllers
 {
     using System;
-    using System.ComponentModel.DataAnnotations;
     using System.Data.Entity;
     using System.Linq;
     using System.Net;
@@ -135,7 +134,7 @@ namespace BlogSystem.Controllers
                     database.SaveChanges();
                     this.AddNotification("Article created!", NotificationType.INFO);
 
-                    return RedirectToAction("Index");
+                    return RedirectToAction("List");
                 }
             }
 
@@ -205,7 +204,7 @@ namespace BlogSystem.Controllers
                 database.SaveChanges();
                 this.AddNotification("Article deleted!", NotificationType.SUCCESS);
 
-                return RedirectToAction("Index");
+                return RedirectToAction("List");
             }
         }
 
@@ -287,7 +286,7 @@ namespace BlogSystem.Controllers
                     database.SaveChanges();
                     this.AddNotification("Article edited!", NotificationType.SUCCESS);
 
-                    return RedirectToAction("Index");
+                    return RedirectToAction("List");
                 }
             }
 

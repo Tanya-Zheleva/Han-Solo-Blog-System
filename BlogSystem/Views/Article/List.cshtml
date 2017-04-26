@@ -8,13 +8,11 @@
     <div class="row">
 
         <p>
-            @Html.ActionLink("Create New", "Create")
-
             @using (Html.BeginForm("Index", "Article", FormMethod.Get))
             {
-            <p>
-                Title: @Html.TextBox("SearchString") <br />
-                <input type="submit" name="submit" value="Filter" />
+            <p class="well col-lg-12">
+                @Html.TextBox("SearchString", null, new { @class = "search-option col-lg-4" }) <br />
+                <input type="submit" name="submit" value="Search" class="filter-bar btn btn-default" />
             </p>
             }
             </p>

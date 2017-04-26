@@ -8,12 +8,11 @@
 <div class="container">
     <div class="row">
         <p>
-            @Html.ActionLink("Create New", "Create", "Article")
             @using (Html.BeginForm("Index", "Article", FormMethod.Get))
             {
-            <p>
-                Title: @Html.TextBox("SearchString") <br />
-                <input type="submit" name="submit" value="Filter" />
+            <p class="well">
+                @Html.TextBox("SearchString", null, new { @class = "search-option col-lg-4" }) <br />
+                <input type="submit" name="submit" value="Search" class="filter-bar btn btn-default" />
             </p>
             }
             </p>
@@ -42,7 +41,7 @@
 
             @foreach (var article in Model)
             {
-                <div class="col-sm-6">
+                <div class="col-sm-4">
                     <article>
                         <div class="article-background">
                             <header>
