@@ -1,5 +1,5 @@
 ﻿@using BlogSystem.Models
-@model List<BlogSystem.Models.Article>
+@model IEnumerable<BlogSystem.Models.Article>
 
 @{
     ViewBag.Title = "List";
@@ -7,45 +7,78 @@
 
 <div class="container">
     <div class="row">
-        @foreach (var article in Model)
-        {
-            <div class="col-sm-6">
-                <article>
-                    <div class="article-background">
-                        <header>
-                            <h2>
-                                @Html.ActionLink(@article.Title, "Details", "Article", new { @id = article.Id }, null)
-                            </h2>
-                        </header>
-                        <p>
-                            @{
-                                string content = article.Content.Substring(0, article.Content.Length < 40 ? article.Content.Length : 40);
+        <p>
+            @Html.ActionLink("Create New", "Create", "Article")
+            @using (Html.BeginForm("Index", "Article", FormMethod.Get))
+            {
+            <p>
+                Title: @Html.TextBox("SearchString") <br />
+                <input type="submit" name="submit" value="Filter" />
+            </p>
+            }
+            </p>
 
-                                if (content.Length >= 40)
-                                {
-                                    content += "...";
+            @if (!Request["submit"].IsEmpty())
+            {
+                <table class="table">
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Title)
+                        </th>
+                        <th></th>
+                    </tr>
+
+                    @foreach (var article in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.ActionLink(article.Title, "Details", "Article")
+                            </td>
+                        </tr>
+                    }
+
+                </table>
+            }
+
+            @foreach (var article in Model)
+            {
+                <div class="col-sm-6">
+                    <article>
+                        <div class="article-background">
+                            <header>
+                                <h2>
+                                    @Html.ActionLink(@article.Title, "Details", "Article", new { @id = article.Id }, null)
+                                </h2>
+                            </header>
+                            <p>
+                                @{
+                                    string content = article.Content.Substring(0, article.Content.Length < 40 ? article.Content.Length : 40);
+
+                                    if (content.Length >= 40)
+                                    {
+                                        content += "...";
+                                    }
                                 }
-                            }
-                            
-                            @content
-                        </p>
+
+                                @content
+                            </p>
                             <small class="author" id="adjust-read-more">
                                 --author @article.Author.FullName
                             </small>
-                    
-                        <footer class="pull-left">
-                            @if (article.Content.Length >= 40)
-                            {
-                                @Html.ActionLink("Read more", "Details", "Article", new { @id = article.Id }, new { @class = "btn btn-default btn-xs" })
-                            }
-                        </footer>
+
+                            <footer class="pull-left">
+                                @if (article.Content.Length >= 40)
+                                {
+                                    @Html.ActionLink("Read more", "Details", "Article", new { @id = article.Id }, new { @class = "btn btn-default btn-xs" })
+                                }
+                            </footer>
                         </div>
                     </article>
                 </div>
-        }
+                                    }
+        </div>
     </div>
-</div>
-<hr />
+    <hr />
 
 
 

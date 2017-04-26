@@ -15,9 +15,27 @@ namespace BlogSystem.Controllers
     {
         //
         // GET: Article
-        public ActionResult Index()
+        public ActionResult Index(string searchString)
         {
-            return RedirectToAction("List");
+            var db = new BlogDbContext();
+
+            var articles = from a in db.Articles
+                           select a;
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                articles = articles.Where(s => s.Title.ToLower().Contains(searchString.ToLower()));
+            }
+
+            return View(articles);
+
+        }
+
+        [HttpPost]
+        [Authorize]
+        public string Index(FormCollection fc, string searchString)
+        {
+            return "<h3> From [HttpPost]Index: " + searchString + "</h3>";
         }
 
         //

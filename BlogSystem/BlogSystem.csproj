@@ -349,6 +349,7 @@
     <Content Include="Views\Home\ListCategories.cshtml" />
     <Content Include="Views\Tag\List.cshtml" />
     <Content Include="Views\Shared\_Notifications.cshtml" />
+    <Content Include="Views\Article\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

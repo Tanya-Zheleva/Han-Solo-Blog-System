@@ -1,4 +1,4 @@
-﻿@model List<BlogSystem.Models.Article>
+﻿@model IEnumerable<BlogSystem.Models.Article>
 
 @{
     ViewBag.Title = "List";
@@ -6,6 +6,41 @@
 
 <div class="container">
     <div class="row">
+        
+        <p>
+            @Html.ActionLink("Create New", "Create")
+
+            @using (Html.BeginForm("Index", "Article", FormMethod.Get))
+            {
+            <p>
+                Title: @Html.TextBox("SearchString") <br />
+                <input type="submit" name="submit" value="Filter" />
+            </p>
+            }
+            </p>
+
+            @if (!Request["submit"].IsEmpty())
+            {
+                <table class="table">
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Title)
+                        </th>
+                        <th></th>
+                    </tr>
+
+                    @foreach (var article in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.ActionLink(article.Title, "Details", "Article")
+                            </td>
+                        </tr>
+                    }
+
+                </table>
+            }
+
         @foreach (var article in Model)
         {
             <div class="col-sm-6">
@@ -13,7 +48,7 @@
                     <div class="article-background">
                         <header>
                             <h2>
-                                @Html.ActionLink(@article.Title, "Details", "Article", new { @id = article.Id }, null)
+                                @Html.ActionLink(@article.Title, "Details", "Article", new {@id = article.Id}, null)
                             </h2>
                         </header>
                         <p>
@@ -35,13 +70,13 @@
                         <footer class="pull-left">
                             @if (article.Content.Length >= 40)
                             {
-                                @Html.ActionLink("Read more", "Details", "Article", new { @id = article.Id }, new { @class = "btn btn-default btn-xs" })
+                                @Html.ActionLink("Read more", "Details", "Article", new {@id = article.Id}, new {@class = "btn btn-default btn-xs"})
                             }
                         </footer>
                     </div>
                 </article>
             </div>
-         }
+        }
     </div>
 </div>
 <hr />

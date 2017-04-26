@@ -1,0 +1,40 @@
+﻿@model IEnumerable<BlogSystem.Models.Article>
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+
+    @using (Html.BeginForm("Index", "Article", FormMethod.Get))
+    {
+    <p>
+        Title: @Html.TextBox("SearchString") <br />
+        <input type="submit" name="submit" value="Filter" />
+    </p>
+    }
+    </p>
+
+    @if (!Request["submit"].IsEmpty())
+            {
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Title)
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var article in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.ActionLink(article.Title, "Details", "Article")
+                    </td>
+                </tr>
+            }
+
+        </table>
+    }
