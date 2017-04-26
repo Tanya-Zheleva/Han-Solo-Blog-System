@@ -32,7 +32,7 @@
                     {
                         <tr>
                             <td>
-                                @Html.ActionLink(article.Title, "Details", "Article")
+                                @Html.ActionLink(article.Title, "Details", "Article", new { @id = article.Id }, new { @class = "btn btn-default btn-xs" })
                             </td>
                         </tr>
                     }
@@ -79,6 +79,3 @@
         </div>
     </div>
     <hr />
-
-
-
