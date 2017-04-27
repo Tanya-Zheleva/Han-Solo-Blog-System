@@ -6,7 +6,7 @@
 <p>
     @using (Html.BeginForm("Index", "Article", FormMethod.Get))
     {
-    <p class="well col-lg-12">
+    <p class="well">
         @Html.TextBox("SearchString", null, new { @class = "search-option col-lg-4" }) <br />
         <input type="submit" name="submit" value="Search" class="filter-bar btn btn-default" />
     </p>
@@ -14,23 +14,15 @@
     </p>
 
     @if (!Request["submit"].IsEmpty())
-            {
-        <table class="table">
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Title)
-                </th>
-                <th></th>
-            </tr>
+    {
 
-            @foreach (var article in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.ActionLink(article.Title, "Details", "Article", new { @id = article.Id }, new { @class = "btn btn-default btn-xs" })
-                    </td>
-                </tr>
-            }
+        foreach (var article in Model)
+        {
+            <div class="col-md-4 text-center">
+                <div class="well">
+                    @Html.ActionLink(article.Title, "Details", "Article", new { @id = article.Id }, new { @class = "article-title" })
+                </div>
+            </div>
+        }
 
-        </table>
     }

@@ -28,7 +28,9 @@
             <div class="form-group">
                 @Html.Label("image", "Image", new { @class = "control-label col-sm-4" })
                 <div class="col-sm-4">
-                    @Html.TextBox("image", null, new { type="file", @class = "form-control" })
+                    <div class="form-control image-box">
+                    @Html.TextBox("image", null, new { type = "file", @class = "btn-md" })
+                        </div>
                 </div>
             </div>
 
