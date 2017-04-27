@@ -23,7 +23,7 @@ namespace BlogSystem.Controllers
 
             if (!string.IsNullOrEmpty(searchString))
             {
-                articles = articles.Where(s => s.Title.ToLower().StartsWith(searchString.ToLower()));
+                articles = articles.Where(s => s.Title.ToLower().Contains(searchString.ToLower()));
             }
 
             return View(articles);

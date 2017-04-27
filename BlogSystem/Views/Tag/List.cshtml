@@ -1,4 +1,4 @@
-﻿<h2>Articles found by tag</h2>
+﻿<h2>Articles found by tag </h2>
 
 @model List<BlogSystem.Models.Article>
 
@@ -9,32 +9,37 @@
 <div class="container">
     <div class="row">
         @foreach (var article in Model)
-        {
-            <div class="col-sm-6">
-                <article>
-                    <header>
-                        <h2>
-                            @Html.ActionLink(@article.Title, "Details", "Article", new { @id = article.Id }, null)
-                        </h2>
-                    </header>
-                    <p>
-                        @article.Content
-                    </p>
-                    <footer>
-                        <small class="author pull-left">
-                            --author @article.Author.FullName
-                        </small>
-                        <br />
-                        <div class="pull-left">
-                            @foreach (var tag in article.Tags)
+            {
+            <div class="col-md-4">
+                <article class="well">
+                    <div>
+                        <header class="text-center">
+                            <h2>
+                                @Html.ActionLink(@article.Title, "Details", "Article", new { @id = article.Id }, null)
+                            </h2>
+                        </header>
+                        <p>
+                            @{
+                                string content = article.Content.Substring(0, article.Content.Length < 145 ? article.Content.Length : 145);
+
+                                if (content.Length >= 145)
+                                {
+                                    content += "...";
+                                }
+                            }
+
+                            @content
+                        </p>
+                        <div class="pull-right" id="adjust-read-more">
+                            @if (article.Content.Length >= 145)
                             {
-                                @Html.ActionLink(tag.Name, "List", "Tag", new {@id = tag.Id}, new {@class = "btn btn-success btn-xs"})
+                                @Html.ActionLink("Read more", "Details", "Article", new { @id = article.Id }, new { @class = "btn btn-default btn-xs" })
                             }
                         </div>
-                    </footer>
+                    </div>
                 </article>
             </div>
-        }
+                                }
     </div>
 </div>
 <hr />
