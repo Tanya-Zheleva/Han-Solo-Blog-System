@@ -16,7 +16,7 @@
                         @Html.ActionLink(string.Format($"{category.Name} ({category.Articles.Count})"),
                             "ListArticles", "Home",
                             new { @categoryId = category.Id },
-                            new { @class = "link-text" })
+                            new { @class = "link-text category-title" })
                     </h2>
                 </div>
             </div>

@@ -19,8 +19,11 @@
     border-radius: 55px;
 }*/
 
+
+
 .link-text {
     color: white;
+    font-size: 0.8em;
 }
 
 .resize-img {
@@ -39,8 +42,7 @@
 }
 
 #adjust-read-more {
-
-    margin-top: -15px;
+    margin-top: -11px;
 }
 
 .article-image {
@@ -55,19 +57,25 @@
 }
 
 .filter-bar {
-    position: relative;
+    /*position: relative;
     left: 36%;
-    bottom: 30%;
-    top: -15px;
+    bottom: 50px;
+    top: -10px;*/
+    visibility: hidden;
 }
 
 .search-option {
     position: relative;
     left: 35%;
+    margin-top: 8px;
     width: 450px;
     height: 50px;
     border: 1px solid gray;
     border-radius: 30px;
+}
+
+.search-glass {
+    position: static;
 }
 
 .article-title {
@@ -75,5 +83,23 @@
 }
 
 .image-box {
- width: 280px;
+    width: 280px;
+}
+
+.inner-addon {
+    position: relative;
+}
+
+.inner-addon .glyphicon {
+    position: absolute;
+    padding: 24px;
+    float: none;
+}
+
+.right-addon .glyphicon {
+    right: 452px;
+}
+
+.right-addon input {
+    padding-right: 30px;
 }

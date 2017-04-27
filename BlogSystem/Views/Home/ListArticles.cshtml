@@ -7,16 +7,18 @@
 
 <div class="container">
     <div class="row">
-        <p>
+        <div>
             @using (Html.BeginForm("Index", "Article", FormMethod.Get))
             {
-            <p class="well">
-                @Html.TextBox("SearchString", null, new { @class = "search-option col-lg-4" }) <br />
-                <input type="submit" name="submit" value="Search" class="filter-bar btn btn-default" />
-            </p>
+                <div class="well">
+                    <div class="inner-addon right-addon">
+                        @Html.TextBox("SearchString", null, new { @class = "search-option col-md-4", @placeholder = "Search articles" }) <br />
+                        <i class="glyphicon glyphicon-search"></i>
+                        <input type="submit" name="submit" value="Search" class="filter-bar btn btn-default" />
+                    </div>
+                </div>
             }
-            </p>
-
+        </div>
 
         @if (!Request["submit"].IsEmpty())
         {
@@ -34,7 +36,7 @@
 
            @foreach (var article in Model)
             {
-            <div class="col-sm-4">
+            <div class="col-md-4">
                 <article class="well">
                     <div>
                         <header class="text-center">
@@ -44,9 +46,9 @@
                         </header>
                         <p>
                             @{
-                                string content = article.Content.Substring(0, article.Content.Length < 150 ? article.Content.Length : 150);
+                                string content = article.Content.Substring(0, article.Content.Length < 145 ? article.Content.Length : 145);
 
-                                if (content.Length >= 150)
+                                if (content.Length >= 145)
                                 {
                                     content += "...";
                                 }
@@ -55,7 +57,7 @@
                             @content
                         </p>
                         <div class="pull-right" id="adjust-read-more">
-                            @if (article.Content.Length >= 150)
+                            @if (article.Content.Length >= 145)
                             {
                                 @Html.ActionLink("Read more", "Details", "Article", new { @id = article.Id }, new { @class = "btn btn-default btn-xs" })
                             }
